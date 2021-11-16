@@ -13,7 +13,6 @@ public class Extensions {
             int hex = (word >> 32 - i * 4) & 0xF;
             System.out.printf("%x", hex);
         }
-        System.out.println();
     }
 
     public static int RotWord(int word) {
@@ -69,13 +68,15 @@ public class Extensions {
         return kq;
     }
 
-    public static int[] KeyExpansion(List<Integer> keys, int nK, int nR) {
-        int[] w = new int[nK * (nR + 1)];
+    public static int[] KeyExpansion(List<Integer> keys,int nB,int nK,int nR) {
+        int[] w = new int[nB * (nR + 1)];
         for (int i = 0; i < nK; i++)
             w[i] = keys.get(i);
-        for (int i = nK; i < nK * (nR + 1); i++) {
-            if (i % nK == 0) w[i] = G(w[i - 1], i / 4) ^ w[i - 4];
-            else w[i] = w[i - 1] ^ w[i - 4];
+        for (int i = nK; i < nB * (nR + 1); i++) {
+            int temp = w[i-1];
+            if (i % nK == 0) temp = G(w[i - 1], i / nK);
+            else if (nK >6 && i%nK ==4) temp = SubWord(temp);
+            w[i] = w[i - nK] ^ temp;
         }
         return w;
     }
@@ -147,14 +148,38 @@ public class Extensions {
             Extensions.showWord(states[i]);
     }
 
-    public static int[] EncryptionAes(List<Integer> states, List<Integer> keys, int nK, int nR) {
-        int[] w = KeyExpansion(keys, nK, nR);
+    public static void showMatrix(Integer[] states) {
+        for (int i = 0; i < states.length; i++)
+            Extensions.showWord(states[i]);
+    }
+
+    public static int[] EncryptionAes(List<Integer> states, List<Integer> keys,  int nB,int nK,int nR) {
+        int[] w = KeyExpansion(keys,nB,nK,nR);
         int[] state = AddRoundKey(states, Arrays.stream(w).boxed().collect(Collectors.toList()));
         for (int j = 1; j <= nR; j++) {
             state = SubBytes(Arrays.stream(state).boxed().collect(Collectors.toList()));
+            System.out.printf("Round [%d]. s_box: ",j);
+            showMatrix(state);
+            System.out.println();
             state = ShiftRows(Arrays.stream(state).boxed().collect(Collectors.toList()));
-            if (j != nR) state = MixColumns(Arrays.stream(state).boxed().collect(Collectors.toList()));
-            state = AddRoundKey(Arrays.stream(state).boxed().collect(Collectors.toList()), Arrays.stream(w).boxed().collect(Collectors.toList()).subList(nK * j, w.length));
+            System.out.printf("Round [%d]. s_row: ",j);
+            showMatrix(state);
+            System.out.println();
+            if (j != nR){
+                System.out.printf("Round [%d]. m_col: ",j);
+                state = MixColumns(Arrays.stream(state).boxed().collect(Collectors.toList()));
+                showMatrix(state);
+                System.out.println();
+            }
+            state = AddRoundKey(Arrays.stream(state).boxed().collect(Collectors.toList()), Arrays.stream(w).boxed().collect(Collectors.toList()).subList(nB * j, w.length));
+            System.out.printf("Round [%d]. k_sch: ",j);
+            showMatrix(Arrays.stream(w).boxed().collect(Collectors.toList()).subList(nB * j, nB*j+4).stream().toArray(Integer[]::new));
+            System.out.println();
+            if(j!=nR){
+                System.out.printf("Round [%d]. start: ",j+1);
+                showMatrix(state);
+                System.out.println();
+            }
         }
         return state;
     }
@@ -264,13 +289,13 @@ public class Extensions {
         return kq;
     }
 
-    public static int[] InvAes(List<Integer> states, List<Integer> keys, int nK, int nR) {
-        int[] w = KeyExpansion(keys, nK, nR);
-        int[] state = AddRoundKey(states, Arrays.stream(w).boxed().collect(Collectors.toList()).subList(nK * nR, w.length));
+    public static int[] InvAes(List<Integer> states, List<Integer> keys, int nB,int nK, int nR) {
+        int[] w = KeyExpansion(keys, nB,nK, nR);
+        int[] state = AddRoundKey(states, Arrays.stream(w).boxed().collect(Collectors.toList()).subList(nB * nR, w.length));
         for (int j = 1; j <= nR; j++) {
             state = InvShiftRow(Arrays.stream(state).boxed().collect(Collectors.toList()));
             state = InvSubBytes(Arrays.stream(state).boxed().collect(Collectors.toList()));
-            state = AddRoundKey(Arrays.stream(state).boxed().collect(Collectors.toList()), Arrays.stream(w).boxed().collect(Collectors.toList()).subList(nK * (nR - j), w.length));
+            state = AddRoundKey(Arrays.stream(state).boxed().collect(Collectors.toList()), Arrays.stream(w).boxed().collect(Collectors.toList()).subList(nB * (nR - j), w.length));
             if(j!=nR) state = InvMixColumns(Arrays.stream(state).boxed().collect(Collectors.toList()));
         }
         return state;
