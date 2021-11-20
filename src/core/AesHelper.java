@@ -56,17 +56,17 @@ public class AesHelper {
             0x61, 0xc2, 0x9f, 0x25, 0x4a, 0x94, 0x33, 0x66, 0xcc, 0x83, 0x1d, 0x3a, 0x74, 0xe8, 0xcb, 0x8d };
 
     public static void showMenuOption(){
-        System.out.println("==================================================");
-        System.out.println("|                   MÃ HÓA AES                    |");
-        System.out.println("==================================================");
-        System.out.println("| Lựa chọn:                                       |");
-        System.out.println("| 1. Mã hóa và giải mã theo ECB                   |");
-        System.out.println("| 2. Mã hóa và giải mã theo CBC                   |");
-        System.out.println("| 3. Mã hóa và giải mã theo ECB (Key tạo tự động) |");
-        System.out.println("| 4. Mã hóa và giải mã theo CBC (Key tạo tự động) |");
-        System.out.println("| 5. Xem số bit khác biệt trước và sau khi mã hóa |");
-        System.out.println("| 6. Thoát                                        |");
-        System.out.println("==================================================");
+        System.out.println(" ======================================================");
+        System.out.println("|                     MÃ HÓA AES                       |");
+        System.out.println(" ======================================================");
+        System.out.println("| Lựa chọn:                                            |");
+        System.out.println("| 1. Mã hóa và giải mã theo ECB                        |");
+        System.out.println("| 2. Mã hóa và giải mã theo CBC                        |");
+        System.out.println("| 3. Mã hóa và giải mã theo ECB (Key tạo tự động)      |");
+        System.out.println("| 4. Mã hóa và giải mã theo CBC (Key && Iv tạo tự động)|");
+        System.out.println("| 5. Xem số bit khác biệt trước và sau khi mã hóa      |");
+        System.out.println("| 6. Thoát                                             |");
+        System.out.println(" ======================================================");
         System.out.print("Vui lòng chọn: ");
     }
 }

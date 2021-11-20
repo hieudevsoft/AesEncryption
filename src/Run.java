@@ -31,13 +31,13 @@ public class Run {
                     Encryption.ECBEncryptionWithKey(sc);
                     break;
                 case 2:
-                    Encryption.BCBEncryptionWithKey(sc);
+                    Encryption.CBCEncryptionWithKey(sc);
                     break;
                 case 3:
                     Encryption.ECBEncryptionWithRandomKey(sc);
                     break;
                 case 4:
-                    Encryption.BCBEncryptionWithRandomKey(sc);
+                    Encryption.CBCEncryptionWithRandomKey(sc);
                     break;
                 case 5:
                     Encryption.diffBit();
