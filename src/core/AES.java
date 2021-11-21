@@ -28,21 +28,21 @@ public class AES {
             this.key[i] = key[i];
         }
         Nb = 4;
+        System.out.println(key.length);
         switch (key.length) {
-            case 16:
+            case 16 -> {
                 Nr = 10;
                 Nk = 4;
-                break;
-            case 24:
+            }
+            case 24 -> {
                 Nr = 12;
                 Nk = 6;
-                break;
-            case 32:
+            }
+            case 32 -> {
                 Nr = 14;
                 Nk = 8;
-                break;
-            default:
-                throw new IllegalArgumentException("Chỉ hỗ trợ 128, 192 and 256 bit keys!");
+            }
+            default -> throw new IllegalArgumentException("Chỉ hỗ trợ 128, 192 and 256 bit keys!");
         }
 
         state = new int[2][4][Nb];
