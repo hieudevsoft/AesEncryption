@@ -4,10 +4,7 @@ import core.AES;
 
 import java.security.SecureRandom;
 import java.text.DecimalFormat;
-import java.util.Base64;
-import java.util.BitSet;
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
 
 public class Encryption {
     private static AES aes;
@@ -15,7 +12,7 @@ public class Encryption {
     private static byte[] cipherText;
     private static DecimalFormat df = new DecimalFormat();
     public static void ECBEncryptionWithKey(Scanner sc){
-        df.setMaximumFractionDigits(5);
+        df.setMaximumFractionDigits(8);
         while (true){
             try {
                 System.out.print("Plain text: ");
@@ -26,19 +23,19 @@ public class Encryption {
                 byte[] key;
                 key = keyInput.getBytes();
                 aes = new AES(key);
-                double startTime = System.currentTimeMillis();
+                long startTime = System.nanoTime();
                 System.out.println("Plain text: " + plainText);
                 byte [] cipherBytes = aes.ECB_encrypt(inputText);
                 String a = Base64.getEncoder().encodeToString(cipherBytes);
                 System.out.println("Cipher text: " + a.trim());
-                double endTime = System.currentTimeMillis();
-                System.out.println("ECB Encryption | "+df.format((endTime-startTime)/1000.00) + " secs");
-                startTime = System.currentTimeMillis();
+                long endTime = System.nanoTime();
+                System.out.println("ECB Encryption | "+df.format((float)(endTime-startTime)/1000.00) + "ms");
+                startTime = System.nanoTime();
                 System.out.println("Cipher text: " + a.trim());
-                plainText = new String(aes.ECB_decrypt(cipherBytes)).trim();
+                plainText = new String(aes.ECB_decrypt(cipherBytes));
                 System.out.println("Plain text: " + plainText);
-                endTime = System.currentTimeMillis();
-                System.out.println("ECB Decryption | "+df.format((endTime-startTime)/1000.00) + " secs");
+                endTime = System.nanoTime();
+                System.out.println("ECB Decryption | "+df.format((float)(endTime-startTime)/1000.00) + "ms");
                 plaintext = inputText;
                 cipherText = cipherBytes;
                 break;
@@ -50,7 +47,7 @@ public class Encryption {
     }
 
     public static void ECBEncryptionWithRandomKey(Scanner sc){
-        df.setMaximumFractionDigits(5);
+        df.setMaximumFractionDigits(8);
         while (true){
             try {
                 System.out.print("Plain text: ");
@@ -60,19 +57,18 @@ public class Encryption {
                 key = makeRandomKey();
                 System.out.println("Random Key: " + Base64.getEncoder().encodeToString(key));
                 aes = new AES(key);
-                double startTime = System.currentTimeMillis();
-                System.out.println("Plain text: " + plainText);
+                long startTime = System.nanoTime();
                 byte [] cipherBytes = aes.ECB_encrypt(inputText);
                 String a = Base64.getEncoder().encodeToString(cipherBytes);
                 System.out.println("Cipher text: " + a.trim());
-                double endTime = System.currentTimeMillis();
-                System.out.println("ECB Encryption | "+df.format((endTime-startTime)/1000.00) + " secs");
-                startTime = System.currentTimeMillis();
+                long endTime = System.nanoTime();
+                System.out.println("ECB Encryption | "+df.format((float)(endTime-startTime)/1000.00) + "ms");
+                startTime = System.nanoTime();
                 System.out.println("Cipher text: " + a.trim());
-                plainText = new String(aes.ECB_decrypt(cipherBytes)).trim();
+                plainText = new String(aes.ECB_decrypt(cipherBytes));
                 System.out.println("Plain text: " + plainText);
-                endTime = System.currentTimeMillis();
-                System.out.println("ECB Decryption | "+df.format((endTime-startTime)/1000.00) + " secs");
+                endTime = System.nanoTime();
+                System.out.println("ECB Decryption | "+df.format((float)(endTime-startTime)/1000.00) + "ms");
                 plaintext = inputText;
                 cipherText = cipherBytes;
                 break;
@@ -84,7 +80,7 @@ public class Encryption {
     }
 
     public static void CBCEncryptionWithKey(Scanner sc){
-        df.setMaximumFractionDigits(5);
+        df.setMaximumFractionDigits(8);
         while (true){
             try {
                 System.out.print("Plain text: ");
@@ -98,19 +94,19 @@ public class Encryption {
                 key = keyInput.getBytes();
                 byte[] iv = ivInput.getBytes();
                 aes = new AES(key,iv);
-                double startTime = System.currentTimeMillis();
+                long startTime = System.nanoTime();
                 System.out.println("Plain text: " + plainText);
                 byte [] cipherBytes = aes.CBC_encrypt(inputText);
                 String a = Base64.getEncoder().encodeToString(cipherBytes);
                 System.out.println("Cipher text: " + a.trim());
-                double endTime = System.currentTimeMillis();
-                System.out.println("CBC Encryption | "+df.format((endTime-startTime)/1000.00) + " secs");
-                startTime = System.currentTimeMillis();
+                long endTime = System.nanoTime();
+                System.out.println("CBC Encryption | "+df.format((float)(endTime-startTime)/1000.00) + "ms");
+                startTime = System.nanoTime();
                 System.out.println("Cipher text: " + a.trim());
-                plainText = new String(aes.CBC_decrypt(cipherBytes)).trim();
+                plainText = new String(aes.CBC_encrypt(cipherBytes));
                 System.out.println("Plain text: " + plainText);
-                endTime = System.currentTimeMillis();
-                System.out.println("CBC Decryption | "+df.format((endTime-startTime)/1000.00) + " secs");
+                endTime = System.nanoTime();
+                System.out.println("CBC Decryption | "+df.format((float)(endTime-startTime)/1000.00) + "ms");
                 plaintext = inputText;
                 cipherText = cipherBytes;
                 break;
@@ -122,7 +118,7 @@ public class Encryption {
     }
 
     public static void CBCEncryptionWithRandomKey(Scanner sc){
-        df.setMaximumFractionDigits(5);
+        df.setMaximumFractionDigits(8);
         while (true){
             try {
                 System.out.print("Plain text: ");
@@ -133,21 +129,20 @@ public class Encryption {
                 System.out.println("Random Key: " + Base64.getEncoder().encodeToString(key));
                 byte[] iv = makeRandomIv();
                 aes = new AES(key,iv);
-                double startTime = System.currentTimeMillis();
-                System.out.println("Plain text: " + plainText);
+                long startTime = System.nanoTime();
                 byte [] cipherBytes = aes.CBC_encrypt(inputText);
                 String a = Base64.getEncoder().encodeToString(cipherBytes);
                 System.out.println("Cipher text: " + a.trim());
                 String b = Base64.getEncoder().encodeToString(iv);
                 System.out.println("Iv: " + b.trim());
-                double endTime = System.currentTimeMillis();
-                System.out.println("CBC Encryption | "+df.format((endTime-startTime)/1000.00) + " secs");
-                startTime = System.currentTimeMillis();
+                long endTime = System.nanoTime();
+                System.out.println("CBC Encryption | "+df.format((float)(endTime-startTime)/1000000f) + "ms");
+                startTime = System.nanoTime();
                 System.out.println("Cipher text: " + a.trim());
-                plainText = new String(aes.CBC_decrypt(cipherBytes)).trim();
+                plainText = new String(aes.CBC_decrypt(cipherBytes));
                 System.out.println("Plain text: " + plainText);
-                endTime = System.currentTimeMillis();
-                System.out.println("CBC Decryption | "+df.format((endTime-startTime)/1000.00) + " secs");
+                endTime = System.nanoTime();
+                System.out.println("CBC Decryption | "+df.format((float)(endTime-startTime)/1000000f) + "ms");
                 plaintext = inputText;
                 cipherText = cipherBytes;
                 break;

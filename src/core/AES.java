@@ -28,7 +28,6 @@ public class AES {
             this.key[i] = key[i];
         }
         Nb = 4;
-        System.out.println(key.length);
         switch (key.length) {
             case 16 -> {
                 Nr = 10;
